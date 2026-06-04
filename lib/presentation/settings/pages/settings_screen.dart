@@ -3,10 +3,23 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../../auth/bloc/auth_bloc.dart';
 
-/// The settings screen of the PowerIoT application.
-/// Allows the user to manage their profile, account credentials,
-/// alert preferences (Notification Center), system language, and theme.
-/// Also provides the functionality to log out of the current session.
+// ─────────────────────────────────────────────────
+// COLOURS
+// ─────────────────────────────────────────────────
+class _C {
+  static const scaffold = Color(0xFFF0F7FF);
+  static const accentBlue = Color(0xFF2196F3);
+  static const paleBlue = Color(0xFFEAF4FD);
+  static const softBlue = Color(0xFFD6EEFF);
+  static const lightBlue = Color(0xFFB3D9F2);
+  static const divider = Color(0xFFD0E8FA);
+  static const textPrimary = Color(0xFF0D2B4E);
+  static const textSecondary = Color(0xFF5A7A9A);
+  static const textMuted = Color(0xFF90A8BF);
+  static const red = Color(0xFFC62828);
+}
+
+/// Redesigned Settings Screen – light blue & white theme.
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
 
@@ -18,200 +31,81 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool _lowVoltageAlert = true;
   bool _highVoltageAlert = true;
   bool _fuelAlert = true;
+  bool _outageNotify = true;
   String _selectedAppearance = 'Light';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF4F8FB),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFFF4F8FB),
-        elevation: 0,
-        toolbarHeight: 64,
-        title: Row(
-          children: [
-            const Icon(Icons.bolt, color: Colors.blueAccent, size: 28),
-            const SizedBox(width: 8),
-            Text(
-              'PowerIoT',
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onSurface,
-                fontWeight: FontWeight.w900,
-                fontSize: 22,
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.notifications_none,
-              color: Color(0xFF003366),
-            ),
-            onPressed: () {},
-          ),
-          const SizedBox(width: 8),
-        ],
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
-        child: Column(
-          children: [
-            _buildProfileSection(),
-            const SizedBox(height: 32),
-            _buildAccountCredentials(),
-            const SizedBox(height: 24),
-            _buildNotificationCenter(),
-            const SizedBox(height: 24),
-            _buildSystemPreferences(),
-            const SizedBox(height: 32),
-            _buildLogoutButton(context),
-            const SizedBox(height: 16),
-            const Text(
-              'Version 2.4.0 (Enterprise) • Build #9203',
-              style: TextStyle(color: Colors.blueGrey, fontSize: 12),
-            ),
-            const SizedBox(height: 32),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildProfileSection() {
-    return Column(
-      children: [
-        Stack(
-          alignment: Alignment.bottomRight,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: const Color(0xFF0D47A1), width: 3),
-              ),
-              child: const CircleAvatar(
-                radius: 48,
-                backgroundColor: Colors.white,
-                backgroundImage: NetworkImage(
-                  'https://i.pravatar.cc/150?img=11',
-                ), // Generic placeholder avatar
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                color: const Color(0xFF0D47A1),
-                shape: BoxShape.circle,
-                border: Border.all(color: Colors.white, width: 2),
-              ),
-              child: const Icon(Icons.edit, color: Colors.white, size: 16),
-            ),
-          ],
-        ),
-        const SizedBox(height: 16),
-        const Text(
-          'John Doe',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF003366),
-          ),
-        ),
-        const SizedBox(height: 8),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Icon(Icons.email_outlined, size: 14, color: Colors.blueGrey),
-            SizedBox(width: 6),
-            Text(
-              'john.doe@energy.io',
-              style: TextStyle(color: Colors.blueGrey, fontSize: 14),
-            ),
-          ],
-        ),
-        const SizedBox(height: 4),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Icon(Icons.phone_outlined, size: 14, color: Colors.blueGrey),
-            SizedBox(width: 6),
-            Text(
-              '+1 (555) 000-1234',
-              style: TextStyle(color: Colors.blueGrey, fontSize: 14),
-            ),
-          ],
-        ),
-        const SizedBox(height: 16),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-          decoration: BoxDecoration(
-            color: const Color(0xFF0D47A1),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: const Text(
-            'Active Admin',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildAccountCredentials() {
-    return _buildSectionCard(
-      title: 'Account Credentials',
-      icon: Icons.manage_accounts_outlined,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      backgroundColor: _C.scaffold,
+      body: Stack(
         children: [
-          _buildTextField('Full Name', 'John Doe'),
-          const SizedBox(height: 16),
-          _buildTextField('Contact Number', '+1 (555) 000-1234'),
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 20),
-            child: Divider(color: Color(0xFFE2E8F0), thickness: 1),
-          ),
-          const Text(
-            'SECURITY',
-            style: TextStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.bold,
-              color: Colors.blueGrey,
-              letterSpacing: 1.5,
+          // Blue gradient header
+          Positioned(
+            top: 0, left: 0, right: 0, height: 220,
+            child: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [Color(0xFF1565C0), Color(0xFF1E88E5), Color(0xFF42A5F5)],
+                ),
+              ),
             ),
           ),
-          const SizedBox(height: 12),
-          InkWell(
-            onTap: () {},
-            borderRadius: BorderRadius.circular(12),
+          Positioned(
+            top: -60, right: -60,
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              width: 200, height: 200,
               decoration: BoxDecoration(
-                color: const Color(0xFFE0F2FE),
-                borderRadius: BorderRadius.circular(12),
+                shape: BoxShape.circle,
+                color: Colors.white.withValues(alpha: 0.07),
               ),
-              child: Row(
-                children: const [
-                  Icon(Icons.restore, color: Color(0xFF0D47A1), size: 20),
-                  SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      'Update Password',
-                      style: TextStyle(
-                        color: Color(0xFF0D47A1),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                      ),
+            ),
+          ),
+          SafeArea(
+            child: Column(
+              children: [
+                _buildAppBar(),
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
+                    child: Column(
+                      children: [
+                        _buildProfileCard(context),
+                        const SizedBox(height: 16),
+                        _buildSectionCard(
+                          icon: Icons.manage_accounts_outlined,
+                          title: 'Account Details',
+                          child: _buildAccountDetails(),
+                        ),
+                        const SizedBox(height: 16),
+                        _buildSectionCard(
+                          icon: Icons.notifications_active_outlined,
+                          title: 'Notification Center',
+                          child: _buildNotifications(),
+                        ),
+                        const SizedBox(height: 16),
+                        _buildSectionCard(
+                          icon: Icons.tune_outlined,
+                          title: 'System Preferences',
+                          child: _buildSystemPreferences(),
+                        ),
+                        const SizedBox(height: 24),
+                        _buildLogoutButton(context),
+                        const SizedBox(height: 16),
+                        const Text(
+                          'Version 2.4.0 (Enterprise)  •  Build #9203',
+                          style: TextStyle(
+                              color: _C.textMuted,
+                              fontSize: 11,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ],
                     ),
                   ),
-                  Icon(Icons.chevron_right, color: Color(0xFF0D47A1), size: 20),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ],
@@ -219,210 +113,511 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  Widget _buildTextField(String label, String value) {
+  // ──────────────────────────────────
+  // APP BAR
+  // ──────────────────────────────────
+  Widget _buildAppBar() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 28),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('POWERIOT',
+                  style: TextStyle(
+                      color: Colors.white.withValues(alpha: 0.75),
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 1.8)),
+              const SizedBox(height: 4),
+              const Row(
+                children: [
+                  Icon(Icons.settings_outlined, color: Colors.white, size: 22),
+                  SizedBox(width: 6),
+                  Text('Settings',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w800,
+                          fontSize: 24)),
+                ],
+              ),
+            ],
+          ),
+          Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white.withValues(alpha: 0.18),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.3)),
+            ),
+            child: IconButton(
+              icon: const Icon(Icons.notifications_none, color: Colors.white),
+              onPressed: () {},
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ──────────────────────────────────
+  // PROFILE CARD
+  // ──────────────────────────────────
+  Widget _buildProfileCard(BuildContext context) {
+    return _LightCard(
+      child: Row(
+        children: [
+          GestureDetector(
+            onTap: () => context.go('/settings/update-profile'),
+            child: Stack(
+              alignment: Alignment.bottomRight,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(3),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: _C.accentBlue, width: 2.5),
+                  ),
+                  child: const CircleAvatar(
+                    radius: 36,
+                    backgroundColor: Colors.white,
+                    backgroundImage:
+                        NetworkImage('https://i.pravatar.cc/150?img=11'),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    color: _C.accentBlue,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white, width: 1.5),
+                  ),
+                  child: const Icon(Icons.edit, color: Colors.white, size: 12),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('John Doe',
+                    style: TextStyle(
+                        color: _C.textPrimary,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w800)),
+                const SizedBox(height: 3),
+                const Text('john.doe@energy.io',
+                    style: TextStyle(color: _C.textSecondary, fontSize: 12)),
+                const SizedBox(height: 3),
+                const Text('+1 (555) 000-1234',
+                    style: TextStyle(color: _C.textSecondary, fontSize: 12)),
+                const SizedBox(height: 8),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: _C.accentBlue,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: const Text('Active Admin',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w700)),
+                ),
+              ],
+            ),
+          ),
+          const Icon(Icons.chevron_right, color: _C.textMuted),
+        ],
+      ),
+    );
+  }
+
+  // ──────────────────────────────────
+  // ACCOUNT DETAILS
+  // ──────────────────────────────────
+  Widget _buildAccountDetails() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: const TextStyle(fontSize: 12, color: Colors.blueGrey),
-        ),
-        const SizedBox(height: 8),
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-          decoration: BoxDecoration(
-            color: const Color(0xFFF1F5F9),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: const Color(0xFFE2E8F0)),
-          ),
-          child: Text(
-            value,
-            style: const TextStyle(color: Color(0xFF003366), fontSize: 14),
-          ),
+        _infoField(Icons.person_outline, 'Full Name', 'John Doe'),
+        const SizedBox(height: 12),
+        _infoField(Icons.phone_outlined, 'Contact', '+1 (555) 000-1234'),
+        const SizedBox(height: 16),
+        const _SectionLabel('SECURITY'),
+        const SizedBox(height: 10),
+        _tappableRow(
+          icon: Icons.lock_outline_rounded,
+          label: 'Update Password',
+          onTap: () {},
+          color: _C.accentBlue,
+          bg: _C.paleBlue,
         ),
       ],
     );
   }
 
-  Widget _buildNotificationCenter() {
-    return _buildSectionCard(
-      title: 'Notification Center',
-      icon: Icons.notifications_active_outlined,
-      child: Column(
+  Widget _infoField(IconData icon, String label, String value) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      decoration: BoxDecoration(
+        color: _C.paleBlue,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: _C.divider),
+      ),
+      child: Row(
         children: [
-          _buildSwitchItem(
-            'Low Voltage',
-            'Alert when voltage drops below 190V',
-            _lowVoltageAlert,
-            (val) => setState(() => _lowVoltageAlert = val),
-          ),
-          const Divider(color: Color(0xFFE2E8F0), height: 32),
-          _buildSwitchItem(
-            'High Voltage',
-            'Alert when voltage exceeds 250V',
-            _highVoltageAlert,
-            (val) => setState(() => _highVoltageAlert = val),
-          ),
-          const Divider(color: Color(0xFFE2E8F0), height: 32),
-          _buildSwitchItem(
-            'Low Fuel Level',
-            'Alert when generator fuel is below 15%',
-            _fuelAlert,
-            (val) => setState(() => _fuelAlert = val),
+          Icon(icon, color: _C.accentBlue, size: 16),
+          const SizedBox(width: 10),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(label,
+                  style: const TextStyle(
+                      color: _C.textMuted,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w600)),
+              const SizedBox(height: 2),
+              Text(value,
+                  style: const TextStyle(
+                      color: _C.textPrimary,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700)),
+            ],
           ),
         ],
       ),
     );
   }
 
-  Widget _buildSwitchItem(
-    String title,
-    String subtitle,
-    bool value,
-    ValueChanged<bool> onChanged,
-  ) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  Widget _tappableRow({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+    required Color color,
+    required Color bg,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+        decoration: BoxDecoration(
+          color: bg,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          children: [
+            Icon(icon, color: color, size: 18),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(label,
+                  style: TextStyle(
+                      color: color,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 13)),
+            ),
+            Icon(Icons.chevron_right, color: color, size: 18),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // ──────────────────────────────────
+  // NOTIFICATIONS
+  // ──────────────────────────────────
+  Widget _buildNotifications() {
+    return Column(
       children: [
+        _switchRow(
+          icon: Icons.flash_off_outlined,
+          title: 'Low Voltage',
+          subtitle: 'Alert when voltage drops below 190V',
+          value: _lowVoltageAlert,
+          onChanged: (v) => setState(() => _lowVoltageAlert = v),
+        ),
+        _divider(),
+        _switchRow(
+          icon: Icons.flash_on_outlined,
+          title: 'High Voltage',
+          subtitle: 'Alert when voltage exceeds 250V',
+          value: _highVoltageAlert,
+          onChanged: (v) => setState(() => _highVoltageAlert = v),
+        ),
+        _divider(),
+        _switchRow(
+          icon: Icons.local_gas_station_outlined,
+          title: 'Low Fuel Level',
+          subtitle: 'Alert when generator fuel is below 15%',
+          value: _fuelAlert,
+          onChanged: (v) => setState(() => _fuelAlert = v),
+        ),
+        _divider(),
+        _switchRow(
+          icon: Icons.power_off_outlined,
+          title: 'MSEB Outage',
+          subtitle: 'Notify when a grid outage is detected',
+          value: _outageNotify,
+          onChanged: (v) => setState(() => _outageNotify = v),
+        ),
+      ],
+    );
+  }
+
+  Widget _switchRow({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required bool value,
+    required ValueChanged<bool> onChanged,
+  }) {
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: value ? _C.paleBlue : const Color(0xFFF5F5F5),
+            shape: BoxShape.circle,
+          ),
+          child: Icon(icon,
+              color: value ? _C.accentBlue : _C.textMuted, size: 16),
+        ),
+        const SizedBox(width: 12),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF003366),
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                subtitle,
-                style: const TextStyle(fontSize: 12, color: Colors.blueGrey),
-              ),
+              Text(title,
+                  style: const TextStyle(
+                      color: _C.textPrimary,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700)),
+              const SizedBox(height: 2),
+              Text(subtitle,
+                  style: const TextStyle(
+                      color: _C.textSecondary, fontSize: 11)),
             ],
           ),
         ),
         Switch(
           value: value,
-          activeColor: const Color(0xFF0D47A1),
+          activeThumbColor: _C.accentBlue,
+          activeTrackColor: _C.softBlue,
+          inactiveThumbColor: _C.textMuted,
+          inactiveTrackColor: _C.divider,
           onChanged: onChanged,
         ),
       ],
     );
   }
 
+  Widget _divider() => const Padding(
+        padding: EdgeInsets.symmetric(vertical: 10),
+        child: Divider(color: _C.divider, height: 1),
+      );
+
+  // ──────────────────────────────────
+  // SYSTEM PREFERENCES
+  // ──────────────────────────────────
   Widget _buildSystemPreferences() {
-    return _buildSectionCard(
-      title: 'System Preferences',
-      icon: Icons.settings_outlined,
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                'Language',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF003366),
-                ),
+    return Column(
+      children: [
+        // Language row
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: const [
+                Icon(Icons.language_outlined,
+                    color: _C.accentBlue, size: 16),
+                SizedBox(width: 10),
+                Text('Language',
+                    style: TextStyle(
+                        color: _C.textPrimary,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700)),
+              ],
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: _C.paleBlue,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: _C.divider),
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 8,
-                ),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF1F5F9),
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: const Color(0xFFE2E8F0)),
-                ),
-                child: const Text(
-                  'English (US)',
-                  style: TextStyle(fontSize: 12, color: Color(0xFF003366)),
-                ),
+              child: const Text('English (US)',
+                  style: TextStyle(
+                      color: _C.accentBlue,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600)),
+            ),
+          ],
+        ),
+        const SizedBox(height: 14),
+        const Divider(color: _C.divider, height: 1),
+        const SizedBox(height: 14),
+        // Appearance toggle
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: const [
+                Icon(Icons.palette_outlined,
+                    color: _C.accentBlue, size: 16),
+                SizedBox(width: 10),
+                Text('Appearance',
+                    style: TextStyle(
+                        color: _C.textPrimary,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700)),
+              ],
+            ),
+            Container(
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: _C.paleBlue,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: _C.divider),
               ),
-            ],
-          ),
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 16),
-            child: Divider(color: Color(0xFFE2E8F0), thickness: 1),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                'Appearance',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF003366),
-                ),
+              child: Row(
+                children: [
+                  _appearanceChip('Light', Icons.wb_sunny_outlined),
+                  _appearanceChip('Dark', Icons.nights_stay_outlined),
+                ],
               ),
-              Container(
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF1F5F9),
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: const Color(0xFFE2E8F0)),
-                ),
-                child: Row(
-                  children: [
-                    _buildSegmentButton('Light', Icons.wb_sunny_outlined),
-                    _buildSegmentButton('Dark', Icons.nights_stay_outlined),
-                  ],
-                ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 14),
+        const Divider(color: _C.divider, height: 1),
+        const SizedBox(height: 14),
+        // Units row
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: const [
+                Icon(Icons.straighten_outlined,
+                    color: _C.accentBlue, size: 16),
+                SizedBox(width: 10),
+                Text('Units',
+                    style: TextStyle(
+                        color: _C.textPrimary,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700)),
+              ],
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: _C.paleBlue,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: _C.divider),
               ),
-            ],
-          ),
-        ],
-      ),
+              child: const Text('Metric (kWh, L)',
+                  style: TextStyle(
+                      color: _C.accentBlue,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600)),
+            ),
+          ],
+        ),
+      ],
     );
   }
 
-  Widget _buildSegmentButton(String label, IconData icon) {
-    bool isSelected = _selectedAppearance == label;
+  Widget _appearanceChip(String label, IconData icon) {
+    final sel = _selectedAppearance == label;
     return GestureDetector(
       onTap: () => setState(() => _selectedAppearance = label),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
         decoration: BoxDecoration(
-          color: isSelected ? Colors.white : Colors.transparent,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: isSelected
-              ? [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
-                    blurRadius: 4,
-                  ),
-                ]
-              : null,
+          color: sel ? _C.accentBlue : Colors.transparent,
+          borderRadius: BorderRadius.circular(9),
+          boxShadow: sel
+              ? [BoxShadow(
+                  color: _C.accentBlue.withValues(alpha: 0.3),
+                  blurRadius: 8, offset: const Offset(0, 2))]
+              : [],
         ),
         child: Row(
           children: [
-            Icon(
-              icon,
-              size: 14,
-              color: isSelected ? const Color(0xFF0D47A1) : Colors.blueGrey,
-            ),
-            const SizedBox(width: 6),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                color: isSelected ? const Color(0xFF0D47A1) : Colors.blueGrey,
-              ),
-            ),
+            Icon(icon,
+                size: 13,
+                color: sel ? Colors.white : _C.textSecondary),
+            const SizedBox(width: 5),
+            Text(label,
+                style: TextStyle(
+                    color: sel ? Colors.white : _C.textSecondary,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700)),
           ],
         ),
       ),
     );
   }
 
+  // ──────────────────────────────────
+  // SECTION CARD WRAPPER
+  // ──────────────────────────────────
+  Widget _buildSectionCard({
+    required IconData icon,
+    required String title,
+    required Widget child,
+  }) {
+    return _LightCard(
+      padding: EdgeInsets.zero,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Header bar
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+            decoration: const BoxDecoration(
+              color: _C.paleBlue,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(7),
+                  decoration: BoxDecoration(
+                    color: _C.accentBlue.withValues(alpha: 0.12),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(icon, color: _C.accentBlue, size: 16),
+                ),
+                const SizedBox(width: 10),
+                Text(title,
+                    style: const TextStyle(
+                        color: _C.textPrimary,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w800)),
+              ],
+            ),
+          ),
+          const Divider(color: _C.divider, height: 1),
+          Padding(
+            padding: const EdgeInsets.all(18),
+            child: child,
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ──────────────────────────────────
+  // LOGOUT BUTTON
+  // ──────────────────────────────────
   Widget _buildLogoutButton(BuildContext context) {
     return SizedBox(
       width: double.infinity,
@@ -431,71 +626,63 @@ class _SettingsScreenState extends State<SettingsScreen> {
           context.read<AuthBloc>().add(LogoutRequested());
           context.go('/login');
         },
+        icon: const Icon(Icons.logout, size: 18),
+        label: const Text('Logout',
+            style: TextStyle(
+                fontSize: 15, fontWeight: FontWeight.w800, letterSpacing: 0.5)),
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFFC62828), // Deep Red
+          backgroundColor: _C.red,
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          elevation: 0,
-        ),
-        icon: const Icon(Icons.logout, size: 20),
-        label: const Text(
-          'Logout',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              borderRadius: BorderRadius.circular(16)),
+          padding: const EdgeInsets.symmetric(vertical: 15),
+          elevation: 2,
+          shadowColor: _C.red.withValues(alpha: 0.4),
         ),
       ),
     );
   }
+}
 
-  Widget _buildSectionCard({
-    required String title,
-    required IconData icon,
-    required Widget child,
-  }) {
+// ─────────────────────────────────────────────────
+// SHARED WIDGETS
+// ─────────────────────────────────────────────────
+class _SectionLabel extends StatelessWidget {
+  final String text;
+  const _SectionLabel(this.text);
+
+  @override
+  Widget build(BuildContext context) => Text(
+        text,
+        style: const TextStyle(
+            color: _C.textMuted,
+            fontSize: 10,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 1.5),
+      );
+}
+
+class _LightCard extends StatelessWidget {
+  final Widget child;
+  final EdgeInsetsGeometry? padding;
+  const _LightCard({required this.child, this.padding});
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
+      padding: padding ?? const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: const Color(0xFFF8FAFC),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFE2E8F0)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(
-              left: 20,
-              top: 20,
-              right: 20,
-              bottom: 16,
-            ),
-            child: Row(
-              children: [
-                Icon(icon, color: const Color(0xFF003366), size: 20),
-                const SizedBox(width: 12),
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF003366),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const Divider(height: 1, color: Color(0xFFE2E8F0)),
-          Container(
-            padding: const EdgeInsets.all(20),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
-            ),
-            child: child,
-          ),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: _C.divider),
+        boxShadow: [
+          BoxShadow(
+              color: _C.lightBlue.withValues(alpha: 0.25),
+              blurRadius: 16,
+              offset: const Offset(0, 4)),
         ],
       ),
+      child: child,
     );
   }
 }

@@ -23,7 +23,7 @@ class PowerIoTApp extends StatelessWidget {
     return BlocProvider(
       create: (_) => di.sl<AuthBloc>(),
       child: MaterialApp.router(
-        title: 'PowerIoT',
+        title: 'demo ',
         debugShowCheckedModeBanner: false,
         theme: AppTheme.lightTheme,
         routerConfig: goRouter,

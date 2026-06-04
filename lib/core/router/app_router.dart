@@ -10,6 +10,7 @@ import '../../presentation/dashboard/pages/dashboard_screen.dart';
 import '../../presentation/consumption/pages/consumption_screen.dart';
 import '../../presentation/analytics/pages/analytics_screen.dart';
 import '../../presentation/settings/pages/settings_screen.dart';
+import '../../presentation/settings/pages/update_profile_screen.dart';
 
 // Private navigators used for the nested stateful shell routes.
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -125,6 +126,12 @@ final goRouter = GoRouter(
               path: '/settings',
               pageBuilder: (context, state) =>
                   const NoTransitionPage(child: SettingsScreen()),
+              routes: [
+                GoRoute(
+                  path: 'update-profile',
+                  builder: (context, state) => const UpdateProfileScreen(),
+                ),
+              ],
             ),
           ],
         ),
