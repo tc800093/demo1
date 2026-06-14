@@ -66,3 +66,36 @@ class DefaultFirebaseOptions {
     iosBundleId: 'com.example.poweriot',
   );
 }
+
+
+// import 'package:flutter/material.dart';
+
+// class PowerIotLogo extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Row(
+//       mainAxisSize: MainAxisSize.min, // Keeps the row tight around the logo
+//       crossAxisAlignment: CrossAxisAlignment.start, // Aligns the WiFi icon to the top
+//       children: [
+//         const Text(
+//           'PowerIot',
+//           style: TextStyle(
+//             fontSize: 48,
+//             fontWeight: FontWeight.w800,
+//             color: Color(0xFF2C3E50), // A sleek, dark slate color
+//             letterSpacing: -1.0, // Tucks the letters slightly closer together
+//           ),
+//         ),
+//         Transform.translate(
+//           // Shifts the WiFi icon slightly up and left to nestle it over the 't'
+//           offset: const Offset(-8, -4), 
+//           child: const Icon(
+//             Icons.wifi,
+//             color: Color(0xFF3498DB), // Bright blue
+//             size: 28,
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }
